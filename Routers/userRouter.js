@@ -1,5 +1,6 @@
 import express from 'express';
-import { currentUser, forgetPassword, logoutUser } from '../Controllers/userController.js';
+import { currentUser, forgetPassword, logoutUser, updateUser } from '../Controllers/userController.js';
+import authorization from '../Middleware/authorization.js';
 
 const router = express.Router();
 
@@ -7,9 +8,7 @@ const router = express.Router();
 router.put('/logout/:id',logoutUser);
 router.get('/currentuser/:id',currentUser);
 router.put('/forgotpassword',forgetPassword);
-
-
-//admin
+router.put('/update/:id',authorization,updateUser);
 
 
 export default router;

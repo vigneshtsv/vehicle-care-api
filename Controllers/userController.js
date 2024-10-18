@@ -103,4 +103,48 @@ export const currentUser = async (req,res) => {
      }
  }
  
- 
+ export const updateUser = async(req,res,next) => {
+    if(req.user.id != req.params.userId){
+        return next(errorHandler(401,"Unauthorized access to update the user"))
+    }
+    if(req.body.password) {
+        if(req.body.password.length < 6 ) {
+            return next(errorHandler(408,"Password must be atleast 6 charactors"));
+        }
+    }
+    if(req.body.FirstName) {
+        if(req.body.FirstName.length < 7 || req.body.FirstName.length > 16) {
+            return next(
+                errorHandler(400,"Username must between 7 and 16 charactors")
+            );
+        }
+        if(req.body.FirstName.includes(" ")) {
+            return next(errorHandler(400,"username must not contain spaces"));
+        }
+        if(req.body.FirstName !== req.body.FirstName.toLowerCase()) {
+            return next(errorHandler(400, "Username must be lowercase"));
+        }
+        if(!req.body.FirstName.match(/^[A-Za-z0-9 ]+$/)) {
+            return next (
+                errorHandler(400, "Username can only contain latters and numbers")
+            );
+        }
+    }
+
+    try {
+        const updateUser = await userRole.findByIdAndUpdate(req.params.userId,{
+            $set:{
+                FirstName: req.body.FirstName,
+                Email: req.body.Email,
+                Password: req.body.Password,
+                ProfilePicture: req.body.ProfilePicture
+            },
+        },{
+            new:true
+        })
+        const { Password,...rest } = updateUser._doc
+        res.status(200).json(rest);
+    } catch (error) {
+        next(error)
+    }
+ }

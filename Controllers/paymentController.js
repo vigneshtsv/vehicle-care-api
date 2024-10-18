@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import orderData from "../Models/order.js";
 
 
 export const order = async (req,res) => {
@@ -17,10 +17,10 @@ export const order = async (req,res) => {
                 message : "Internal server Error in payment order"
             })
         }else{
-            const orderData = await orderData.create({...req.body,amount: req.body.amount/100, currentUserId : req.params.id})
+            const orderdata = await orderData.create({...req.body,amount: req.body.amount/100, currentUserId : req.params.id})
             res.status(200).send({
                 order,
-                orderData
+                orderdata
             })
         }
     } catch (error) {

@@ -4,9 +4,9 @@ import {deleteUser, getAllUser,getUserById, getUserProfile, updateUser} from '..
 const router = express.Router();
 
 router.get('/getalluser',getAllUser);
-router.get('/getuserbyid',getUserById);
-router.get('/getuserprofile',getUserProfile);
-router.put('/updateuser',updateUser);
-router.delete('/deleteuser',deleteUser);
+router.get('/getuserbyid/:id',getUserById);
+router.get('/getuserprofile/:id',getUserProfile);
+router.put('/updateuser/:id',updateUser);
+router.delete('/deleteuser/:id',deleteUser);
 
 export default router;

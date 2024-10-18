@@ -1,6 +1,6 @@
 import { getUserIdFromToken } from "../Utils/jsonWebToken.js";
-import { Error } from "./Error.js";
-import userRole from "../Models/User.js"
+import Error from './Error.js';
+import userRole from "../Models/User.js";
 
 const authorization = Error(async (req,res,next) => {
     try {
@@ -8,7 +8,7 @@ const authorization = Error(async (req,res,next) => {
         if(!token) {
             return res.status(404).send({message: "Token not found"});   
         }
-        const userId = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token);  
         if(!userId) {
             throw new Error("Invalid token or user not found");
         }
