@@ -49,10 +49,11 @@ export const getUserProfile = async (req,res,next) => {
 //Update UserDetails
 export const updateUser = async (req,res,next) => {
     const newUserData = {
-        FirstName: req.body.name,
-        LastName: req.body.name,
-        Email: req.body.email,
-        Role: req.body.role
+        FirstName: req.body.FirstName,
+        LastName: req.body.LastName,
+        Email: req.body.Email,
+        PhoneNumber:req.body.PhoneNumber,
+        Role: req.body.Role
     }
 
     const user = await userRole.findByIdAndUpdate(req.params.id, newUserData, {

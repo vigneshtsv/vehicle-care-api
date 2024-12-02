@@ -20,23 +20,40 @@ const UserSchema = new mongoose.Schema({
     },
     ConfirmPassword: {
         type: String,
-        required: [true, "Password is required"]
+        required: [true, "Password is required"],
     },
     AadharCard:{
         type:String,
-        default:" "
+        default:" ",
+    },
+    DrivingLicence:{
+        type:String,
+        default:" ",
+    },
+    PetrolStationCertification:{
+        type:String,
+        default:" ",
+    },
+    CurrentPhoto:{
+        type:String,
+        default:" ",
+    },
+    MechanicCertificate:{
+        type:String,
+        default:" ",
     },
     ProfilePicture:{
         type: String,
-        default: "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg"
+        default: "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
       },
     Role: {
         type: String,
-        require:[false]
+        enum: ['Admin', 'Customer', 'PetrolStation', 'DeliveryBoy', 'ServiceMan'],
     },
 },{timestamps:true})
 
 
-const userRole = mongoose.model('user',UserSchema)
+const userRole = mongoose.model('userroles',UserSchema)
 
 export default userRole;
+

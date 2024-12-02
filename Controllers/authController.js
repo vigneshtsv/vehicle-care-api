@@ -72,11 +72,11 @@ import { generateToken } from '../Utils/jsonWebToken.js';
 
 export const registerUser = async (req,res,next) => {
     try {
-        let { FirstName,LastName,Email,Password,Role } = req.body;
+        let { FirstName,LastName,Email,PhoneNumber,Password,ConfirmPassword,Address,AadharCard,DrivingLicence,PetrolStationCertification,MechanicCertificate,CurrentPhoto,Role } = req.body;
         const existingUser = await userRole.findOne({ Email : Email });
 
         if(existingUser) {
-            return res.status(400).json({message: `${FirstName} Already Exists`}); 
+            return res.status(400).json({message: `${Email} Already Exists`}); 
         }
 
         Password = bcryptjs.hashSync(Password, 10);
@@ -84,10 +84,19 @@ export const registerUser = async (req,res,next) => {
             FirstName,
             LastName,
             Email,
+            PhoneNumber,
             Password,
+            ConfirmPassword,
+            Address,
+            AadharCard,
+            DrivingLicence,
+            PetrolStationCertification,
+            MechanicCertificate,
+            CurrentPhoto,
             Role,
         });
-
+        
+        
         await userData.save();
         const jwt = generateToken(userData._id);
 
@@ -114,17 +123,7 @@ export const loginUser = async (req,res) => {
         }
         const jwt = generateToken(user._id);
         user.Password = null;
-        
-        // if(user){
-        //     if(await Auth.hashCompare(password,user.password)){
-        //         let token = await Auth.createToken({
-        //             Email,
-        //             Role: user.Role,
-        //             id: user._id
-        //         })
-        //     }
-        // }
-
+    
         res.status(200).json({message: 'Login Successfully',data:user, token:jwt,})
         
     } catch (error) {

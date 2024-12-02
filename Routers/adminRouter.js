@@ -10,3 +10,4 @@ router.put('/updateuser/:id',updateUser);
 router.delete('/deleteuser/:id',deleteUser);
 
 export default router;
+
