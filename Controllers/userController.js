@@ -135,6 +135,7 @@ export const currentUser = async (req,res) => {
         const updateUser = await userRole.findByIdAndUpdate(req.params.userId,{
             $set:{
                 FirstName: req.body.FirstName,
+                LastName: req.body.LastName,
                 Email: req.body.Email,
                 Password: req.body.Password,
                 ProfilePicture: req.body.ProfilePicture
@@ -147,4 +148,11 @@ export const currentUser = async (req,res) => {
     } catch (error) {
         next(error)
     }
+ }
+
+ export const upload = async(req,res) => {
+    const  { image } = req.body;
+    console.log('Received image:',image);
+    res.json({ message: 'Image uploaded successfully'});
+
  }

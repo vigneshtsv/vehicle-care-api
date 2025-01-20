@@ -1,42 +1,46 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-    currentUserId : {
+    id : {
         type : String,
         required : true
     },
-    product : [
-        {
-            productId : String,
-            productTittle : String,
-            productQuantity : Number,
-            productPrice : Number,
-            productImage : String,
-            productWeight : String,
-        }
-    ],
-    amount : {
+    Name : {
+        type : String,
+        required : true
+    },
+    Address : {
+        type : String,
+        required : true
+    },
+    latitude : {
         type : Number,
         required : true
     },
-    receipt : {
+    longtitude : {
+        type : Number,
+        required : true
+    },
+    PetrolPrice : {
+        type : Number,
+        required : true
+    },
+    DiselPrice : {
+        type : Number,
+        required : true
+    },
+    Distance : {
         type : String,
         required : true
     },
-    currency : {
+    Services : {
         type : String,
         required : true
     },
-    address : {
+    Specialization : {
         type : String,
-        required : true
-    },
-    orderId : {
-        type : String,
-    },
-    paymentId : {
-        type : String,
-    },
+        required : false
+    }
 },
 { timestamps : true },
 { collection : 'orders' })

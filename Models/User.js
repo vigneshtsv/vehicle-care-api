@@ -9,6 +9,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    PhoneNumber: {
+        type: Number,
+        required: true,
+    },
     Email: {
         type: String,
         required:[true,"Email is required"],
@@ -36,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     },
     CurrentPhoto:{
         type:String,
-        default:" ",
+        default:"",
     },
     MechanicCertificate:{
         type:String,
