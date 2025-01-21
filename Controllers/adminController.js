@@ -53,6 +53,7 @@ export const updateUser = async (req,res,next) => {
         LastName: req.body.LastName,
         Email: req.body.Email,
         PhoneNumber:req.body.PhoneNumber,
+        Address: req.body.Address,
         Role: req.body.Role
     }
 
