@@ -1,49 +1,67 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
-    id : {
-        type : String,
-        required : true
+const orderSchema = new mongoose.Schema(
+  {
+    Email: {
+      type: String,
+      required: true,
     },
-    Name : {
-        type : String,
-        required : true
+    StationName: {
+      type: String,
+      required: false,
     },
-    Address : {
-        type : String,
-        required : true
-    },
-    latitude : {
-        type : Number,
-        required : true
-    },
-    longtitude : {
-        type : Number,
-        required : true
-    },
-    PetrolPrice : {
-        type : Number,
-        required : true
-    },
-    DiselPrice : {
-        type : Number,
-        required : true
+    Location: {
+      type: String,
+      required: false,
     },
     Distance : {
-        type : String,
-        required : true
+      type: Number,
+      require: false,
     },
-    Services : {
-        type : String,
-        required : true
+    Petrol_Price: {
+      type: Number,
+      required: false,
     },
-    Specialization : {
-        type : String,
-        required : false
-    }
-},
-{ timestamps : true },
-{ collection : 'orders' })
+    Petrol_Quantity: {
+      type: Number,
+      required: false,
+    },
+    Disel_Price: {
+      type: Number,
+      required: false,
+    },
+    ServiceName: {
+      type: Number,
+      required: false,
+    },
+    Disel_Quantity: {
+      type: Number,
+      required: false,
+    },
+    Service_Type:{
+      type: String,
+      required: false,
+    },
+    Problem_Type:{
+      type: String,
+      required: false,
+    },
+    PhoneNumber:{
+      type: Number,
+      required: false,
+    },
+    Status: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true },
+  { collection: "orders" }
+);
 
 const orderData = mongoose.model('order',orderSchema)
 

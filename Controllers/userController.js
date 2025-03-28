@@ -1,5 +1,5 @@
 import userRole from "../Models/User.js";
-
+import bcryptjs from 'bcryptjs'
 
 // export const registerUser = async (req,res,next) => {
 //     try {
@@ -70,19 +70,6 @@ import userRole from "../Models/User.js";
     }
  }
 
- //get the current user
-export const currentUser = async (req,res) => {
-    try {
-        let currentuser = await userRole.findById({_id : req.params.userId})
-        res.status(200).send({
-            currentuser
-        })
-    } catch (error) {
-        res.status(500).send({
-            message : "Internal error in fetching Users List"
-        })
-    }
-}
 
  //forgetPassword 
  export const forgetPassword = async (req,res) => {
@@ -105,17 +92,17 @@ export const currentUser = async (req,res) => {
  
  export const updateUser = async(req,res,next) => {
     if(req.user.id != req.params.userId){
-        return next(errorHandler(401,"Unauthorized access to update the user"))
+        return next(errorHandler(403,"Unauthorized access to update the user"))
     }
     if(req.body.password) {
         if(req.body.password.length < 6 ) {
-            return next(errorHandler(408,"Password must be atleast 6 charactors"));
+            return next(errorHandler(400,"Password must be atleast 6 charactors"));
         }
     }
     if(req.body.FirstName) {
         if(req.body.FirstName.length < 7 || req.body.FirstName.length > 16) {
             return next(
-                errorHandler(400,"Username must between 7 and 16 charactors")
+                errorHandler(400,"Username must between 7 and 16 characters")
             );
         }
         if(req.body.FirstName.includes(" ")) {
@@ -125,8 +112,7 @@ export const currentUser = async (req,res) => {
             return next(errorHandler(400, "Username must be lowercase"));
         }
         if(!req.body.FirstName.match(/^[A-Za-z0-9 ]+$/)) {
-            return next (
-                errorHandler(400, "Username can only contain latters and numbers")
+            return next (errorHandler(400, "Username can only contain latters and numbers")
             );
         }
     }
@@ -147,6 +133,18 @@ export const currentUser = async (req,res) => {
         res.status(200).json(rest);
     } catch (error) {
         next(error)
+    }
+ }
+
+ export const deleteUser = async(req,res) => {
+    if (req.user.id !== req.params.id) {
+        return next(errorHandler(403, 'You are not allowed to delete this user'));
+    }
+    try {
+        await userRole.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'User deleted successfully'});
+    } catch (error) {
+        next(error);        
     }
  }
 

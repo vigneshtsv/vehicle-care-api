@@ -2,11 +2,11 @@ import userRole from "../Models/User.js"
 import Error from '../Middleware/Error.js'
 
 // get the allUsers
-export const getAllUser = async (req,res,next) => {
+export const getAllUserData = async (req,res) => {
     const users = await userRole.find();
     res.status(200).json({
-        success: true,
-        users
+        users,
+        message: 'fetch all userData'
     })
 }
 
@@ -15,7 +15,7 @@ export const getUserById = async (req,res,next) => {
    try {
     const user = await userRole.find({_id:req.params.id.trim()});
 
-    if(!user) {
+    if(!user) {     
         return next(new Error(`User not found with this id ${req.params.id}`,401))
     }
     res.status(200).json({
@@ -54,7 +54,8 @@ export const updateUser = async (req,res,next) => {
         Email: req.body.Email,
         PhoneNumber:req.body.PhoneNumber,
         Address: req.body.Address,
-        Role: req.body.Role
+        Role: req.body.Role,
+        ProfilePicture: req.body.ProfilePicture
     }
 
     const user = await userRole.findByIdAndUpdate(req.params.id, newUserData, {

@@ -6,6 +6,8 @@ import connectDB from './Database/dataBase.js';
 import userRouter from './Routers/userRouter.js';
 import adminRouter from './Routers/adminRouter.js';
 import authRouter from './Routers/authRouter.js';
+import orderRouter from './Routers/orderRouter.js';
+import petrolStationRouter from './Routers/petrolStationRouter.js';
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,7 @@ connectDB();
 
 app.use(cors({
     origin: "*",
+    //methods:['']           Ex: GET,POST,PUT,DELETE
     credentials: true,
 })
 );
@@ -25,6 +28,8 @@ app.use(cookieParser()); //middlewear
 app.use("/api",userRouter)
 app.use("/api/admin",adminRouter)
 app.use("/api/auth",authRouter)
+app.use("/api/order",orderRouter)
+app.use("/api/petrolstation",petrolStationRouter)
 
 //Error handler
 app.use((err,req,res,next)=>{
