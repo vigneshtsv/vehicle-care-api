@@ -5,6 +5,7 @@ const petrolStationSchema = new mongoose.Schema(
         StationName: {
             type: String,
             required: true,
+            unique: true,
         },
         Distance: {
             type: Number,

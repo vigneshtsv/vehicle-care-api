@@ -14,7 +14,6 @@ export const uploadMiddleware = upload.fields([
   { name: "DrivingLicence", maxCount: 1 },
   { name: "AadharCard", maxCount: 1 },
   { name: "PetrolStationCertification", maxCount: 1 },
-  // { name: "CurrentPhoto", maxCount: 1 },
   { name: "MechanicCertificate", maxCount: 1 },
 ]);
 
@@ -31,11 +30,12 @@ export const Register = async (req, res) => {
     StationName,
     Role,
     ProfilePicture,
+    AadharCard
   } = req.body;
   const files = req.files;
   console.log(req.body);
   console.log(req.files);
-
+  
   try {
     // 1. Validate required fields
     if (
@@ -78,7 +78,8 @@ export const Register = async (req, res) => {
       Address,
       StationName,
       Role,
-      ProfilePicture
+      ProfilePicture,
+      AadharCard,
     });
 
     // 6. Assign files to respective fields
