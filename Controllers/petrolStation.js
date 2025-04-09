@@ -53,16 +53,19 @@ export const upDatePetrolData = async(req,res,) => {
     }
 }
 
-export const getPetrolData = async(req,res) => {
+export const getPetrolData = async (req, res) => {
     try {
-        const users = await petrolStationData.find({});
+        const stations = await petrolStationData.find({});
         res.status(200).json({
-            success:true,
-            users,
-            message:'fetch successfully'
+            success: true,
+            data: stations,
+            message: 'Fetched all petrol station data successfully'
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Failed to get Petrol Station Data.  Please try again." });
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch petrol station data',
+            error: error.message
+        });
     }
 }

@@ -53,6 +53,7 @@ const orderSchema = new mongoose.Schema(
     Status: {
       type: String,
       required: true,
+      enum: ["Waiting", "Processing", "Completed"],
     },
     createdAt: {
       type: Date,
