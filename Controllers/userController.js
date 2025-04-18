@@ -1,57 +1,6 @@
 import userRole from "../Models/User.js";
 import bcryptjs from 'bcryptjs'
 
-// export const registerUser = async (req,res,next) => {
-//     try {
-//         let { FirstName,LastName,Email,Password,Role } = req.body;
-//         const existingUser = await userRole.findOne({ Email : Email });
-
-//         if(existingUser) {
-//             return res.status(400).json({message: `${FirstName} Already Exists`}); 
-//         }
-
-//         Password = bcryptjs.hashSync(Password, 10);
-//         const userData = new userRole({
-//             FirstName,
-//             LastName,
-//             Email,
-//             Password,
-//             Role,
-//         });
-
-//         const role = await userData.save();
-//         const jwt = generateToken(role._id);
-
-//         res.status(200).json({
-//             message: "Registration Successful",
-//             token: jwt,
-//         })
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({message: 'Failed to register User.  Please try again.'})   
-//     }
-// }
-
-//write a LoginUser controller
-//  export const loginUser = async (req,res) => {
-//     try {
-//         let { Email,Password } = req.body;
-//         let user = await userRole.findOne({Email:Email});
-//         if(!user) {
-//             return res.status(404).json({message: `User Not Found`});
-//         }
-//         const isPasswordValid = bcryptjs.compareSync(Password,user.Password);
-//         if(!isPasswordValid) {
-//             return res.status(401).json({message: "Invalid Password"});
-//         }
-//         const jwt = generateToken(user._id);
-
-//         res.status(200).json({message: 'Login Successfully',data:user, token:jwt})
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({message: `Failed to Login user.  Please try again.`});
-//     }
-//  }
 
  //User Logout
  export const logoutUser = async(req,res) => {
@@ -154,3 +103,57 @@ import bcryptjs from 'bcryptjs'
     res.json({ message: 'Image uploaded successfully'});
 
  }
+
+ //update Profile
+
+export const updateProfile = async (req, res) => {
+ try {
+    const { FirstName, Email, Password } = req.body;
+    const ProfilePicture = req.body.ProfilePicture || '';
+
+    if(Email) {
+        const existingUser = await userRole.findOne ({ Email,_id: {$ne: req.user.id } });
+        if(existingUser) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
+    }
+    const user = await userRole.findById(req.user.id);
+    if(!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (FirstName) user.FirstName = FirstName;
+    if (Email) user.Email = Email;
+    if (Password) user.Password = Password;
+
+    if (ProfilePicture) {
+        if (ProfilePicture.startsWith('data:image/')) {
+            const base64Data = ProfilePicture.split(',')[1];
+            const sizeInBytes = Buffer.from(base64Data, 'base64').length;
+
+            if (sizeInBytes > 2 * 1024 * 1024) { // 2MB limit
+                return res.status(400).json({ message: 'Image size exceeds 2MB' });
+            }
+            user.ProfilePicture = ProfilePicture;
+        }else {
+            return res.status(400).json({ message: 'Invalid image format' });   
+        }
+    }
+
+    await user.save();
+
+    const updatedUser = {
+        _id : user._id,
+        FirstName: user.FirstName,
+        Email: user.Email,
+        ProfilePicture: user.ProfilePicture,
+    }
+    res.status(200).json({
+        message: 'Profile updated successfully',
+        user: updatedUser,
+    });
+ } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+ }  
+} 
