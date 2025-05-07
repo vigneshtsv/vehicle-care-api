@@ -189,7 +189,7 @@ export const Register = async (req, res) => {
           ? `data:${
               savedUser.ProfilePicture.contentType
             };base64,${savedUser.ProfilePicture.data.toString("base64")}`
-          : "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
+          : null,
         AadharCard: savedUser.AadharCard && savedUser.AadharCard.data
           ? `data:${
               savedUser.AadharCard.contentType
@@ -353,18 +353,18 @@ export const LoginForm = async (req, res) => {
   }
 };
 
-export const getMapBox = async (req, res) => {
-  let { lat, lng } = req.body;
-  const accessToken = "";
-  fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/gas%20station.json?proximity=${lng},${lat}&limit=10&access_token=${accessToken}`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((error) => res.status(500).json(error));
-};
+// export const getMapBox = async (req, res) => {
+//   let { lat, lng } = req.body;
+//   const accessToken = "";
+//   fetch(
+//     `https://api.mapbox.com/geocoding/v5/mapbox.places/gas%20station.json?proximity=${lng},${lat}&limit=10&access_token=${accessToken}`
+//   )
+//     .then((response) => response.json())
+//     .then((data) => {
+//       res.status(200).json(data);
+//     })
+//     .catch((error) => res.status(500).json(error));
+// };
 
 export const getGoogleMap = async (req, res) => {
   let { location, radius, type } = req.query;
@@ -372,7 +372,7 @@ export const getGoogleMap = async (req, res) => {
   const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&key=${APIKEY}`;
   try {
     const response = await axios.get(url);
-    res.status(200).json(response.data);
+    res.status(200  ).json(response.data);
   } catch (error) {
     res.status(500).send(error.message);
   }

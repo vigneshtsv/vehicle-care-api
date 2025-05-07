@@ -111,10 +111,10 @@ const UserSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
-    CurrentPhoto:{
-        data: Buffer,
-        contentType: String,
-    },
+    // CurrentPhoto:{
+    //     data: Buffer,
+    //     contentType: String,
+    // },
     MechanicCertificate:{
         data: Buffer,
         contentType: String,
@@ -122,10 +122,11 @@ const UserSchema = new mongoose.Schema({
     ProfilePicture:{
         data: Buffer,
         contentType: String,
-      },
+    },
     StationName:{
         type:String,
-        default:"",
+        contentType: String,
+        
     },  
     Role: {
         type: String,

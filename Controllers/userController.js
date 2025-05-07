@@ -1,7 +1,6 @@
 import userRole from "../Models/User.js";
 import bcryptjs from 'bcryptjs'
 
-
  //User Logout
  export const logoutUser = async(req,res) => {
     try {
@@ -110,24 +109,34 @@ export const updateProfile = async (req, res) => {
  try {
     const { FirstName, Email, Password } = req.body;
     const ProfilePicture = req.body.ProfilePicture || '';
+ 
+    if(!req.user || !req.user.id) {
+        return res.status(401).json({ message: 'Unauthorized access' });
+    }
 
-    if(Email) {
+    const user = await userRole.findById(req.user.id);
+
+    if(!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    
+    if(Email && Email !== user.Email) {
         const existingUser = await userRole.findOne ({ Email,_id: {$ne: req.user.id } });
         if(existingUser) {
             return res.status(400).json({ message: 'Email already exists' });
         }
     }
-    const user = await userRole.findById(req.user.id);
-    if(!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
 
     if (FirstName) user.FirstName = FirstName;
     if (Email) user.Email = Email;
-    if (Password) user.Password = Password;
-
+    if (Password) {
+        const salt = await bcryptjs.genSalt(10);
+        user.Password = await bcryptjs.hash(Password,salt);
+    }
+    
     if (ProfilePicture) {
-        if (ProfilePicture.startsWith('data:image/')) {
+        
+        if (ProfilePicture.startsWith('data:image')) {
             const base64Data = ProfilePicture.split(',')[1];
             const sizeInBytes = Buffer.from(base64Data, 'base64').length;
 
@@ -144,6 +153,7 @@ export const updateProfile = async (req, res) => {
 
     const updatedUser = {
         _id : user._id,
+        Id: user._id,
         FirstName: user.FirstName,
         Email: user.Email,
         ProfilePicture: user.ProfilePicture,
@@ -154,6 +164,7 @@ export const updateProfile = async (req, res) => {
     });
  } catch (error) {
     console.error('Profile update error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error',
+         error: error.message });
  }  
 } 
