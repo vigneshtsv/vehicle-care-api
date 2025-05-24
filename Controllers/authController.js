@@ -8,7 +8,7 @@ dotenv.config();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Middleware for handling image uploads (ProfilePicture, DrivingLicence, AadharCard)
+// Middleware for handling image uploads (ProfilePicture, DrivingLicence, AadharCard, PetrolStationCertification, MechanicCertificate)
 export const uploadMiddleware = upload.fields([
   { name: "ProfilePicture", maxCount: 1 },
   { name: "DrivingLicence", maxCount: 1 },
@@ -18,6 +18,169 @@ export const uploadMiddleware = upload.fields([
 ]);
 
 // Function to handle user registration
+// export const Register = async (req, res) => {
+//   const {
+//     FirstName,
+//     LastName,
+//     PhoneNumber,
+//     Email,
+//     Password,
+//     ConfirmPassword,
+//     Address,
+//     StationName,
+//     Role,
+//     ProfilePicture,
+//     AadharCard
+//   } = req.body;
+//   const files = req.files;
+//   console.log(req.body);
+//   console.log(req.files);
+  
+//   try {
+//     // 1. Validate required fields
+//     if (
+//       !FirstName ||
+//       !LastName ||
+//       !PhoneNumber ||
+//       !Email ||
+//       !Password ||
+//       !ConfirmPassword ||
+//       !Role
+//     ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+
+//     // 2. Check if passwords match
+//     if (Password !== ConfirmPassword) {
+//       return res.status(400).json({ message: "Passwords do not match" });
+//     }
+
+//     // 3. Check if user already exists
+//     const existingUser = await userRole.findOne({ Email });
+//     if (existingUser) {
+//       return res
+//         .status(409)
+//         .json({ message: "User already exists with this email" });
+//     }
+//   console.log(existingUser);
+  
+//     // 4. Hash the password
+//     const hashedPassword = await bcrypt.hash(Password, 10);
+
+//     // 5. Create new user object
+//     const newUser = new userRole({
+//       FirstName,
+//       LastName,
+//       PhoneNumber,
+//       Email,
+//       Password: hashedPassword,
+//       ConfirmPassword,
+//       Address,
+//       StationName,
+//       Role,
+//       ProfilePicture,
+//       AadharCard,
+//     });
+
+//     // 6. Assign files to respective fields
+//     if (files) {
+//       if (files.ProfilePicture) {
+//         newUser.ProfilePicture = {
+//           data: files.ProfilePicture[0].buffer,
+//           contentType: files.ProfilePicture[0].mimetype,
+//         };
+//       }
+//       if (files.DrivingLicence) {
+//         newUser.DrivingLicence = {
+//           data: files.DrivingLicence[0].buffer,
+//           contentType: files.DrivingLicence[0].mimetype,
+//         };
+//       }
+//       if (files.AadharCard) {
+//         newUser.AadharCard = {
+//           data: files.AadharCard[0].buffer,
+//           contentType: files.AadharCard[0].mimetype,
+//         };
+//       }
+//       if (files.PetrolStationCertification) {
+//         newUser.PetrolStationCertification = {
+//           data: files.PetrolStationCertification[0].buffer,
+//           contentType: files.PetrolStationCertification[0].mimetype,
+//         };
+//       }
+//       // if (files.CurrentPhoto) {
+//       //   newUser.CurrentPhoto = {
+//       //     data: files.CurrentPhoto[0].buffer,
+//       //     contentType: files.CurrentPhoto[0].mimetype,
+//       //   };
+//       // }
+//       if (files.MechanicCertificate) {
+//         newUser.MechanicCertificate = {
+//           data: files.MechanicCertificate[0].buffer,
+//           contentType: files.MechanicCertificate[0].mimetype,
+//         };
+//       }
+//     }
+
+//     // 8. Save the new user to the database
+//     const savedUser = await newUser.save();
+//     console.log(savedUser);
+    
+//     const token = jwt.sign(
+//       {
+//         userId:savedUser._id,
+//         Email: savedUser.Email,
+//         Role: savedUser.Role
+//       },
+//       process.env.JWT_SECRET_KEY,{expiresIn: '24h'}
+//     );
+//     console.log(token);
+    
+//     // 9. Send success response
+//     res.status(201).json({
+//       message: "Registration successful",
+//       token,
+//       user: {
+//         id: savedUser._id,
+//         FirstName: savedUser.FirstName,
+//         LastName: savedUser.LastName,
+//         Email: savedUser.Email,
+//         Address: savedUser.Address,
+//         StationName: savedUser.StationName,
+//         Role: savedUser.Role,
+//         ProfilePicture: savedUser.ProfilePicture && savedUser.ProfilePicture.data
+//           ? `data:${
+//               savedUser.ProfilePicture.contentType
+//             };base64,${savedUser.ProfilePicture.data.toString("base64")}`
+//           : null,
+//         AadharCard: savedUser.AadharCard && savedUser.AadharCard.data
+//           ? `data:${
+//               savedUser.AadharCard.contentType
+//             };base64,${savedUser.AadharCard.data.toString("base64")}`
+//           : null,  
+//         DrivingLicence: savedUser.DrivingLicence && savedUser.DrivingLicence.data
+//           ? `data:${
+//               savedUser.DrivingLicence.contentType
+//             };base64,${savedUser.DrivingLicence.data.toString("base64")}`
+//           : null,
+//         MechanicCertificate: savedUser.MechanicCertificate && savedUser.MechanicCertificate.data
+//           ? `data:${
+//               savedUser.MechanicCertificate.contentType
+//             };base64,${savedUser.MechanicCertificate.data.toString("base64")}`
+//           : null,
+//         PetrolStationCertification: savedUser.PetrolStationCertification && savedUser.PetrolStationCertification.data
+//           ? `data:${
+//               savedUser.PetrolStationCertification.contentType
+//             };base64,${savedUser.PetrolStationCertification.data.toString("base64")}`
+//           : null,
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 export const Register = async (req, res) => {
   const {
     FirstName,
@@ -78,35 +241,29 @@ export const Register = async (req, res) => {
       Address,
       StationName,
       Role,
-      ProfilePicture,
-      AadharCard,
+      ProfilePicture: null,
+      AadharCard: null,
+      DrivingLicence: null,
+      PetrolStationCertification: null,
+      MechanicCertificate: null,
     });
 
     // 6. Assign files to respective fields
     if (files) {
-      if (files.ProfilePicture) {
-        newUser.ProfilePicture = {
-          data: files.ProfilePicture[0].buffer,
-          contentType: files.ProfilePicture[0].mimetype,
-        };
+      if (files.ProfilePicture && files.ProfilePicture[0]) {
+        newUser.ProfilePicture = `data:${files.ProfilePicture[0].mimetype};base64,${files.ProfilePicture[0].buffer.toString("base64")}`;
       }
-      if (files.DrivingLicence) {
-        newUser.DrivingLicence = {
-          data: files.DrivingLicence[0].buffer,
-          contentType: files.DrivingLicence[0].mimetype,
-        };
+      if (files.DrivingLicence && files.DrivingLicence[0]) {
+        newUser.DrivingLicence = `data:${files.DrivingLicence[0].mimetype};base64,${files.DrivingLicence[0].buffer.toString('base64')}`;
       }
-      if (files.AadharCard) {
-        newUser.AadharCard = {
-          data: files.AadharCard[0].buffer,
-          contentType: files.AadharCard[0].mimetype,
-        };
+      if (files.AadharCard && files.AadharCard[0]) {
+        newUser.AadharCard = `data:${files.AadharCard[0].mimetype};base64,${files.AadharCard[0].buffer.toString('base64')}`;
       }
-      if (files.PetrolStationCertification) {
-        newUser.PetrolStationCertification = {
-          data: files.PetrolStationCertification[0].buffer,
-          contentType: files.PetrolStationCertification[0].mimetype,
-        };
+      if (files.PetrolStationCertification && files.PetrolStationCertification[0]) {
+        newUser.PetrolStationCertification = `data:${files.PetrolStationCertification[0].mimetype};base64,${files.PetrolStationCertification[0].buffer.toString('base64')}`;
+      }
+      if (files.MechanicCertificate && files.MechanicCertificate[0]) {
+        newUser.MechanicCertificate = `data:${files.MechanicCertificate[0].mimetype};base64,${files.MechanicCertificate[0].buffer.toString('base64')}`;
       }
       // if (files.CurrentPhoto) {
       //   newUser.CurrentPhoto = {
@@ -114,50 +271,14 @@ export const Register = async (req, res) => {
       //     contentType: files.CurrentPhoto[0].mimetype,
       //   };
       // }
-      if (files.MechanicCertificate) {
-        newUser.MechanicCertificate = {
-          data: files.MechanicCertificate[0].buffer,
-          contentType: files.MechanicCertificate[0].mimetype,
-        };
-      }
     }
 
-      // Payload with user data
-    // 7. Role-based field validation
-    // if (Role === "Customer") {
-    //   if (!newUser.AadharCard?.data) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: "AadharCard is required for Customer" });
-    //   }
-    //   if (!newUser.ProfilePicture?.data) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: "ProfilePicture is required for Customer" });
-    //   }
-    // }
-    // if (Role === "DeliveryBoy") {
-    //   if (!newUser.ProfilePicture?.data) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: "ProfilePicture is required for DeliveryBoy" });
-    //   }
-    //   if (!newUser.DrivingLicence?.data) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: "DrivingLicence is required for DeliveryBoy" });
-    //   }
-    //   if (!newUser.AadharCard?.data) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: "AadharCard is required for DeliveryBoy" });
-    //   }
-    // }
-    // if (Role === "ServiceMan" && !newUser.ProfilePicture?.data) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "ProfilePicture is required for ServiceMan" });
-    // }
+     if (ProfilePicture && typeof ProfilePicture === 'string') {
+      newUser.ProfilePicture = ProfilePicture;
+     }
+     if (AadharCard && typeof AadharCard === 'string') {
+      newUser.AadharCard = AadharCard;
+     }
 
     // 8. Save the new user to the database
     const savedUser = await newUser.save();
@@ -185,31 +306,11 @@ export const Register = async (req, res) => {
         Address: savedUser.Address,
         StationName: savedUser.StationName,
         Role: savedUser.Role,
-        ProfilePicture: savedUser.ProfilePicture && savedUser.ProfilePicture.data
-          ? `data:${
-              savedUser.ProfilePicture.contentType
-            };base64,${savedUser.ProfilePicture.data.toString("base64")}`
-          : null,
-        AadharCard: savedUser.AadharCard && savedUser.AadharCard.data
-          ? `data:${
-              savedUser.AadharCard.contentType
-            };base64,${savedUser.AadharCard.data.toString("base64")}`
-          : null,  
-        DrivingLicence: savedUser.DrivingLicence && savedUser.DrivingLicence.data
-          ? `data:${
-              savedUser.DrivingLicence.contentType
-            };base64,${savedUser.DrivingLicence.data.toString("base64")}`
-          : null,
-        MechanicCertificate: savedUser.MechanicCertificate && savedUser.MechanicCertificate.data
-          ? `data:${
-              savedUser.MechanicCertificate.contentType
-            };base64,${savedUser.MechanicCertificate.data.toString("base64")}`
-          : null,
-        PetrolStationCertification: savedUser.PetrolStationCertification && savedUser.PetrolStationCertification.data
-          ? `data:${
-              savedUser.PetrolStationCertification.contentType
-            };base64,${savedUser.PetrolStationCertification.data.toString("base64")}`
-          : null,
+        ProfilePicture: savedUser.ProfilePicture,
+        AadharCard: savedUser.AadharCard,
+        DrivingLicence: savedUser.DrivingLicence,
+        MechanicCertificate: savedUser.MechanicCertificate,
+        PetrolStationCertification: savedUser.PetrolStationCertification,
       },
     });
   } catch (error) {
@@ -294,14 +395,14 @@ export const LoginForm = async (req, res) => {
         StationName: user.StationName,
         Role: user.Role,
         ProfilePicture:
-        // user.ProfilePicture,
-          user.ProfilePicture &&
-          user.ProfilePicture.data &&
-          user.ProfilePicture.contentType
-            ? `data:${
-                user.ProfilePicture.contentType
-              };base64,${user.ProfilePicture.data.toString("base64")}`
-            : "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
+        user.ProfilePicture,
+        //   user.ProfilePicture &&
+        //   user.ProfilePicture.data &&
+        //   user.ProfilePicture.contentType
+        //     ? `data:${
+        //         user.ProfilePicture.contentType
+        //       };base64,${user.ProfilePicture.data.toString("base64")}`
+        //     : "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
         DrivingLicence:
           user.DrivingLicence &&
           user.DrivingLicence.data &&

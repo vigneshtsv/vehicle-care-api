@@ -119,10 +119,11 @@ const UserSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
-    ProfilePicture:{
-        data: Buffer,
-        contentType: String,
-    },
+    // ProfilePicture:{
+    //     data: Buffer,
+    //     contentType: String,
+    // },
+    ProfilePicture:String,
     StationName:{
         type:String,
         contentType: String,

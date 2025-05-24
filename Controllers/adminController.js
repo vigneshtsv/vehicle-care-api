@@ -27,16 +27,7 @@ export const getUserById = async (req,res,next) => {
    }
 }
 
-//getUserByRole
-// export const getUserByRole = async (req,res,next) => {
-//     try {
-//         const { Role } = req.body  
-//         const users = await userRole.find(users.Role===admin);
-//         res.status
-//     } catch (error) {
-//         console.error({message : `${users} Not a users`})  
-//     }
-// }
+
 //get the userprofile
 export const getUserProfile = async (req,res,next) => {
     const user = await userRole.findById(req.user.id)

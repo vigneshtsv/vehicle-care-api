@@ -103,9 +103,10 @@ import bcryptjs from 'bcryptjs'
 
  }
 
- //update Profile
+ //update Profile (DashboardProfile)
 
 export const updateProfile = async (req, res) => {
+    console.log("update profile called", req.body.FirstName)
  try {
     const { FirstName, Email, Password } = req.body;
     const ProfilePicture = req.body.ProfilePicture || '';
@@ -133,20 +134,20 @@ export const updateProfile = async (req, res) => {
         const salt = await bcryptjs.genSalt(10);
         user.Password = await bcryptjs.hash(Password,salt);
     }
-    
+    // console.log("pic", ProfilePicture)
     if (ProfilePicture) {
-        
-        if (ProfilePicture.startsWith('data:image')) {
-            const base64Data = ProfilePicture.split(',')[1];
-            const sizeInBytes = Buffer.from(base64Data, 'base64').length;
+        user.ProfilePicture = ProfilePicture;
+        // if (ProfilePicture.startsWith('data:image')) {
+        //     const base64Data = ProfilePicture.split(',')[1];
+        //     const sizeInBytes = Buffer.from(base64Data, 'base64').length;
 
-            if (sizeInBytes > 2 * 1024 * 1024) { // 2MB limit
-                return res.status(400).json({ message: 'Image size exceeds 2MB' });
-            }
-            user.ProfilePicture = ProfilePicture;
-        }else {
-            return res.status(400).json({ message: 'Invalid image format' });   
-        }
+        //     if (sizeInBytes > 2 * 1024 * 1024) { // 2MB limit
+        //         return res.status(400).json({ message: 'Image size exceeds 2MB' });
+        //     }
+        //     user.ProfilePicture = ProfilePicture;
+        // }else {
+        //     return res.status(400).json({ message: 'Invalid image format' });   
+        // }
     }
 
     await user.save();
@@ -157,6 +158,7 @@ export const updateProfile = async (req, res) => {
         FirstName: user.FirstName,
         Email: user.Email,
         ProfilePicture: user.ProfilePicture,
+        Password: user.Password,
     }
     res.status(200).json({
         message: 'Profile updated successfully',
