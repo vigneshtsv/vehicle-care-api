@@ -1,19 +1,6 @@
 import orderData from '../Models/order.js'
 
-// export const updateOrderData = async (req,res) => {
-//     try {
-//         const updateOrderData = await orderData.findByIdAndUpdate({_id : req.body.id},{ $set : { orderId : req.body.orderId}});
-//         res.status(200).send({
-//             updateOrderData
-//         })
-//     } catch (error) {
-//         res.status(500).send({
-//             message : "Internal Server Error in getting all stays"
-//         })
-//     }
-// }
 
-//update order Data
 
 export const updateOrderData = async (req, res) => {
     try {
@@ -62,7 +49,7 @@ export const getMyorders = async(req,res) => {
         })
     }
 }
-
+//create customer order
 export const customerOrder = async(req,res) => {
     try {
         const { Email,StationName,Location,Distance,Petrol_Price,Disel_Price,Petrol_Quantity,Disel_Quantity,Service_Type,Problem_Type,PhoneNumber,Status } = req.body;
@@ -94,7 +81,7 @@ export const customerOrder = async(req,res) => {
         res.status(500).json({ message: 'Error in customerOrder', error:error.message});
     }
 };
-
+//get all deliveryData
 export const deliveryBoyData = async(req,res) => {
     try {
         const deliveryBoy = await orderData.find({ Status: { $in: ["Waiting", "Processing", "Completed"] } });

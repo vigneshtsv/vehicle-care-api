@@ -207,7 +207,6 @@ export const Register = async (req, res) => {
       !PhoneNumber ||
       !Email ||
       !Password ||
-      !ConfirmPassword ||
       !Role
     ) {
       return res.status(400).json({ message: "All fields are required" });
@@ -447,7 +446,6 @@ export const LoginForm = async (req, res) => {
             : null,
       },
     });
-    //console.log(token)
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -467,14 +465,14 @@ export const LoginForm = async (req, res) => {
 //     .catch((error) => res.status(500).json(error));
 // };
 
-export const getGoogleMap = async (req, res) => {
-  let { location, radius, type } = req.query;
-  //const APIKEY = AIzaSyD4HjB6WiBhpuZPV9qMrPVVn7e982UOTQ4
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&key=${APIKEY}`;
-  try {
-    const response = await axios.get(url);
-    res.status(200  ).json(response.data);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-};
+// export const getGoogleMap = async (req, res) => {
+//   let { location, radius, type } = req.query;
+//   //const APIKEY = AIzaSyD4HjB6WiBhpuZPV9qMrPVVn7e982UOTQ4
+//   const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&key=${APIKEY}`;
+//   try {
+//     const response = await axios.get(url);
+//     res.status(200  ).json(response.data);
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//   }
+// };
