@@ -193,7 +193,11 @@ export const Register = async (req, res) => {
     StationName,
     Role,
     ProfilePicture,
-    AadharCard
+    AadharCard,
+    DrivingLicence,
+    PetrolStationCertification, 
+    MechanicCertificate
+
   } = req.body;
   const files = req.files;
   console.log(req.body);
@@ -272,12 +276,22 @@ export const Register = async (req, res) => {
       // }
     }
 
-     if (ProfilePicture && typeof ProfilePicture === 'string') {
+    if (ProfilePicture && typeof ProfilePicture === 'string') {
       newUser.ProfilePicture = ProfilePicture;
-     }
-     if (AadharCard && typeof AadharCard === 'string') {
-      newUser.AadharCard = AadharCard;
-     }
+    }
+    if (AadharCard && typeof AadharCard === 'string') {
+     newUser.AadharCard = AadharCard;
+    }
+    if (DrivingLicence && typeof DrivingLicence === 'string') {
+     newUser.DrivingLicence = DrivingLicence;
+    }
+    if (PetrolStationCertification && typeof PetrolStationCertification === 'string') {
+     newUser.PetrolStationCertification = PetrolStationCertification;
+    }
+    if (MechanicCertificate && typeof MechanicCertificate === 'string') {
+     newUser.MechanicCertificate = MechanicCertificate;
+    }
+
 
     // 8. Save the new user to the database
     const savedUser = await newUser.save();
