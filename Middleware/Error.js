@@ -12,3 +12,4 @@ export const errorHandler =(statusCode,message) => {
 }
 
 export default asyncMiddleware;
+

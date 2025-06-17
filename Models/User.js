@@ -3,24 +3,24 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
     FirstName: {
         type: String,
-        required: true,
+        required: false,
     },
     LastName: {
         type: String,
-        required: true,
+        required: false,
     },
     PhoneNumber: {
         type: Number,
-        required: true,
+        required: false,
     },
     Email: {
         type: String,
-        required:[true,"Email is required"],
+        required:[false,"Email is required"],
         unique: true,
     },
     Password: {
         type: String,
-        required:[true,"Password is required"]
+        required:[false,"Password is required"]
     },
     ConfirmPassword: {
         type: String,
@@ -57,7 +57,7 @@ const UserSchema = new mongoose.Schema({
     ProfilePicture:{
         type: String,
         default: "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
-        required: true,
+        required: false,
     },
     // ProfilePicture:String,
     StationName:{
