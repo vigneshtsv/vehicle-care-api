@@ -38,26 +38,93 @@ export const getUserProfile = async (req,res,next) => {
 }
 
 //Update UserDetails
-export const updateUser = async (req,res,next) => {
-    const newUserData = {
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        Email: req.body.Email,
-        PhoneNumber:req.body.PhoneNumber,
-        Address: req.body.Address,
-        Role: req.body.Role,
-        ProfilePicture: req.body.ProfilePicture
+// export const updateUser = async (req,res,next) => {
+//     const newUserData = {
+//         FirstName: req.body.FirstName,
+//         LastName: req.body.LastName,
+//         Email: req.body.Email,
+//         PhoneNumber:req.body.PhoneNumber,
+//         Address: req.body.Address,
+//         Role: req.body.Role,
+//         ProfilePicture: req.body.ProfilePicture
+//     }
+
+//     const user = await userRole.findByIdAndUpdate(req.params.id, newUserData, {
+//         new: true,
+//         runValidators: true,
+//     })
+
+//     res.status(200).json({
+//         success: true,
+//         user
+//     })
+// }
+
+export const updateUser = async (req,res, next) => {
+    try {
+        // Input validation
+        if(!req.params.id) {
+            return res.status(400).json({
+                success: false,
+                message:'User Id is required'
+            });
+        }
+
+        //Build update object with  only provided fileds
+        const updateFields = {};
+        const allowedFileds = ['FirstName','LastName','Email','PhoneNumber','Password','ConfirmPassword','Role']
+
+        allowedFileds.forEach(field => {
+            if (req.body[field] !== undefined) {
+                updateFields[field] = req.body[field];
+            }
+        });
+
+        if(Object.keys(updateFields).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No valid fields provided for update'
+            });
+        }
+        //Update user
+        const user = await userRole.findByIdAndUpdate(
+            req.params.id,
+            updateFields,
+            {
+                new:true,
+                runValidators: true,
+            }
+        );
+
+        if(!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            user
+        });
+    } catch (error) {
+        console.error('Update user error:',error);
+
+        if(error.name === 'ValidationError') {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation error',
+                errors: Object.values(error.errors).map(e => e.message)
+            })
+        }
+        // Handle cast errors (invalid ObjectId)
+        if (error.name === 'CastError') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user ID format'
+            });
+        }
+        next(error);
     }
-
-    const user = await userRole.findByIdAndUpdate(req.params.id, newUserData, {
-        new: true,
-        runValidators: true,
-    })
-
-    res.status(200).json({
-        success: true,
-        user
-    })
 }
 
 //Delete for UserDetails in only by admin

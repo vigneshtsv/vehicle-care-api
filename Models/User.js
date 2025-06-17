@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    EmployeeId: {
+        type: String,
+        required: false,
+    },
     AadharCard:{
         type: String,
         required: false,
