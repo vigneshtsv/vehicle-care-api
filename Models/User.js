@@ -59,7 +59,6 @@ const UserSchema = new mongoose.Schema({
         default: "https://static.vecteezy.com/system/resources/thumbnails/005/544/718/small_2x/profile-icon-design-free-vector.jpg",
         required: false,
     },
-    // ProfilePicture:String,
     StationName:{
         type:String,
         required: false,
