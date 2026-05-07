@@ -335,6 +335,8 @@ export const Register = async (req, res) => {
   }
 };
 
+
+
 // Function to handle user sign-in
 export const LoginForm = async (req, res) => {
   const { Email, Password } = req.body;
@@ -351,6 +353,7 @@ export const LoginForm = async (req, res) => {
 
     // 3. Check if the password matches
     const isPasswordValid = await bcrypt.compare(Password, user.Password);
+    
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid password" });
     }
